@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Relative pronouns and adverbs: mini-aula</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f2a30;--card:#173b42;--ink:#e9f2ef;--muted:#9bb8b4;--ant:#ffb347;--rel:#7be0c3;--ok:#7be0c3;--bad:#ff8f7a;--line:#2b5760;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2a30}}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e8f1ee;--card:#fff;--ink:#12292e;--muted:#4d6b69;--ant:#b35f00;--rel:#0a7a62;--ok:#0a7a62;--bad:#b83a22;--line:#b9cfca;color-scheme:light}}
+:root[data-theme="dark"]{--bg:#0f2a30}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.5 Figtree,system-ui,sans-serif;display:flex;justify-content:center}
+#app{width:100%;max-width:760px;display:flex;flex-direction:column;padding:16px}
+#bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;flex:none}
+#fill{height:100%;width:0;background:var(--rel)}
+#top{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;padding:10px 0}
+#stage{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;overflow-y:auto}
+h1,h2{font-family:Newsreader,Georgia,serif;font-weight:600;margin:0;line-height:1.15}
+h1{font-size:clamp(34px,8vw,56px)}h2{font-size:clamp(24px,5vw,32px)}
+.s{font-family:Newsreader,Georgia,serif;font-size:clamp(22px,4.6vw,30px);line-height:1.35;opacity:0;transform:translateY(8px);animation:in .6s forwards}
+@keyframes in{to{opacity:1;transform:none}}
+.a{color:var(--ant);border-bottom:2px solid var(--ant);font-weight:600}
+.r{color:var(--bg);background:var(--rel);padding:0 6px;border-radius:4px;font-weight:600}
+.blank{display:inline-block;min-width:3.2em;border-bottom:2px dashed var(--muted);text-align:center;color:var(--rel)}
+.note{color:var(--muted);opacity:0;animation:in .6s forwards}
+.tbl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;background:var(--card);padding:16px;border-radius:10px}
+.tbl b{color:var(--rel)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit;color:inherit;cursor:pointer}
+.opt{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:14px;font-size:18px}
+.opt:hover:not(:disabled){border-color:var(--rel)}
+.opt:focus-visible,.ctl:focus-visible{outline:3px solid var(--ant);outline-offset:2px}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 22%,var(--card))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 20%,var(--card))}
+.fb{background:var(--card);border-left:4px solid var(--ant);padding:12px 14px;border-radius:6px}
+#ctls{display:flex;gap:10px;justify-content:space-between;padding-top:12px;flex:none}
+.ctl{background:transparent;border:2px solid var(--line);border-radius:8px;padding:10px 16px}
+.ctl.main{background:var(--rel);color:var(--bg);border-color:var(--rel);font-weight:600}
+.ctl:disabled{opacity:.4;cursor:default}
+.big{font-family:Newsreader,Georgia,serif;font-size:64px;color:var(--rel)}
+@media (max-width:480px){.opts{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.s,.note{animation-duration:.01s}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="top"><span id="cnt"></span><span id="score"></span></div>
+  <div id="stage"></div>
+  <div id="ctls">
+    <button class="ctl" id="prev" aria-label="Anterior">Anterior</button>
+    <button class="ctl" id="play">Pausa</button>
+    <button class="ctl main" id="next">Seguinte</button>
+  </div>
+</div>
+<script>
+var A=function(t){return '<span class="a">'+t+'</span>'},R=function(t){return '<span class="r">'+t+'</span>'};
+var S=[
+{t:'title'},
+{t:'teach',h:'O que fazem os relativos?',d:7,lines:[
+ 'The woman '+R('who')+' lives next door is a linguist.',
+ 'A relative word links a '+A('noun')+' to extra information about it.'],
+ note:'A palavra a laranja é o antecedente; a verde é o pronome relativo. A oração que vem a seguir descreve o antecedente.'},
+{t:'table'},
+{t:'teach',h:'Who ou whom?',d:10,lines:['The man '+R('whom')+' I met is a linguist.','The colleague with '+R('whom')+' I work is Spanish.'],note:'Whom é o objeto do verbo ou vem depois de preposição. Truque: se a resposta for him/her, usa whom; se for he/she, usa who.'},
+{t:'q',q:'The book ___ I borrowed was fascinating.',o:['which','who','whose','when'],a:0,e:'Book é uma coisa e funciona como objeto de borrowed, por isso usa-se which (ou that).'},
+{t:'q',q:'She is the author ___ novel won the prize.',o:['who','whose','which','where'],a:1,e:'Whose indica posse: the author’s novel. É seguido sempre de um nome.'},
+{t:'q',q:'The colleague with ___ I work is Spanish.',o:['who','whom','whose','which'],a:1,e:'Depois da preposição with usa-se whom: with him/her. Who não é possível aqui.'},
+{t:'teach',h:'Advérbios relativos',d:9,lines:[
+ 'This is the café '+R('where')+' we first met.',
+ 'I remember the day '+R('when')+' she left.',
+ 'That’s the reason '+R('why')+' I called.'],
+ note:'Where = lugar, when = tempo, why = razão. Equivalem a preposição + which: the café in which we met.'},
+{t:'q',q:'This is the café ___ we first met.',o:['who','whose','where','why'],a:2,e:'Café é um lugar, logo where (= in which).'},
+{t:'q',q:'I remember the day ___ she left.',o:['when','where','which','whom'],a:0,e:'Day é um momento no tempo, logo when.'},
+{t:'teach',h:'Com vírgulas ou sem vírgulas?',d:9,lines:[
+ 'The students '+R('who')+' study hard pass. (essencial)',
+ 'My sister, '+R('who')+' lives in Porto, is a nurse. (extra)'],
+ note:'Nas orações não restritivas (com vírgulas) a informação é acessória e não se usa that.'},
+{t:'q',q:'Qual é a frase correta?',o:['My sister, that lives in Porto, is a nurse.','My sister, who lives in Porto, is a nurse.'],a:1,e:'Com vírgulas, that não é possível: usa-se who (ou which, para coisas).'},
+{t:'teach',h:'O advérbio why',d:9,lines:['That’s the reason '+R('why')+' I called.','Do you know the reason '+R('why')+' he left?'],note:'Why só se usa depois de reason e introduz a causa. Em inglês corrente pode omitir-se: That’s the reason I called.'},
+{t:'q',q:'Nobody knows the reason ___ he left early.',o:['where','when','why','whom'],a:2,e:'Reason pede why, que introduz a causa. Where é lugar e when é tempo.'},
+{t:'end'}];
+var i=0,playing=true,answered=false,score=0,total=0,done={};
+var st=document.getElementById('stage'),fill=document.getElementById('fill'),timer=null;
+var nQ=S.filter(function(s){return s.t==='q'}).length;
+function go(n){if(n<0||n>=S.length)return;i=n;render()}
+function clear(){clearTimeout(timer);fill.style.transition='none';fill.style.width='0'}
+function auto(ms){
+  fill.style.width='0';fill.offsetWidth;
+  fill.style.transition='width '+ms+'ms linear';fill.style.width='100%';
+  timer=setTimeout(function(){if(playing)go(i+1);else timer=null},ms)
+}
+function render(){
+  clear();var s=S[i],h='',d=0;answered=false;
+  document.getElementById('cnt').textContent=(i+1)+' / '+S.length;
+  document.getElementById('score').textContent=total?'Pontos: '+score+'/'+total:'';
+  var nx=document.getElementById('next');nx.disabled=false;
+  if(s.t==='title'){
+    h='<h1>Relative pronouns and adverbs</h1><p class="note" style="animation-delay:.5s">Mini-aula de linguística em '+(S.length)+' cenas, com '+nQ+' perguntas pelo caminho.</p>';d=5000}
+  else if(s.t==='teach'){
+    h='<h2>'+s.h+'</h2>'+s.lines.map(function(l,k){return '<div class="s" style="animation-delay:'+(.4+k*1.1)+'s">'+l+'</div>'}).join('')+'<p class="note" style="animation-delay:'+(.6+s.lines.length*1.1)+'s">'+s.note+'</p>';d=s.d*1000}
+  else if(s.t==='table'){
+    h='<h2>Pronomes relativos</h2><div class="tbl s"><b>who</b><span>pessoas (sujeito): the man who called</span><b>whom</b><span>pessoas (objeto): the man whom I met</span><b>whose</b><span>posse: the girl whose bag I found</span><b>which</b><span>coisas: the car which broke down</span><b>that</b><span>pessoas ou coisas, só em orações essenciais</span></div>';d=11000}
+  else if(s.t==='q'){
+    var dn=done[i];
+    h='<h2>Pergunta</h2><div class="s">'+s.q.replace('___','<span class="blank" id="bl">&nbsp;</span>')+'</div><div class="opts">'+s.o.map(function(o,k){return '<button class="opt" data-k="'+k+'">'+o+'</button>'}).join('')+'</div><div id="fb"></div>';
+    nx.disabled=true}
+  else{
+    var pct=Math.round(score/nQ*100);
+    h='<h2>Resultado</h2><div class="big">'+score+' / '+nQ+'</div><p>'+(pct>=80?'Excelente: dominas bem a diferença entre pronomes e advérbios relativos.':pct>=50?'Bom caminho. Revê whose, where e as vírgulas nas orações não restritivas.':'Vale a pena rever a aula do início.')+'</p><button class="ctl main" id="again" style="align-self:flex-start">Ver outra vez</button>';fill.style.width='100%';nx.disabled=true}
+  st.innerHTML=h;
+  if(s.t==='q'){
+    st.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){answer(b)}});
+  }
+  if(s.t==='end'){document.getElementById('again').onclick=function(){score=0;total=0;go(0)}}
+  document.getElementById('prev').disabled=i===0;
+  if(d&&playing)auto(d);else if(d){fill.style.width='0'}
+}
+function answer(b){
+  if(answered)return;answered=true;total++;
+  var s=S[i],k=+b.dataset.k,ok=k===s.a;if(ok)score++;
+  st.querySelectorAll('.opt').forEach(function(o,j){o.disabled=true;if(j===s.a)o.classList.add('ok');else if(o===b)o.classList.add('bad')});
+  var bl=document.getElementById('bl');if(bl)bl.textContent=s.o[s.a];
+  document.getElementById('fb').innerHTML='<div class="fb"><b>'+(ok?'Certo.':'Quase.')+'</b> '+s.e+'</div>';
+  document.getElementById('score').textContent='Pontos: '+score+'/'+total;
+  document.getElementById('next').disabled=false;
+  fill.style.transition='width .4s';fill.style.width='100%';
+}
+document.getElementById('next').onclick=function(){go(i+1)};
+document.getElementById('prev').onclick=function(){go(i-1)};
+document.getElementById('play').onclick=function(){
+  playing=!playing;this.textContent=playing?'Pausa':'Continuar';
+  var t=S[i].t;if(t==='title'||t==='teach'||t==='table'){if(playing)render();else{clear()}}
+};
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'&&!document.getElementById('next').disabled)go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+render();
+</script>
+</body>
+</html>
